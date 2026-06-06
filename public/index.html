@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ConnectNow — by Samarth Shinde</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- TOAST CONTAINER -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- CONFETTI CANVAS -->
+<canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+<!-- ══ AUTH SCREEN ══ -->
+<section id="authScreen" class="auth-screen">
+  <div class="auth-noise"></div>
+  <nav class="auth-nav">
+    <div class="logo-mark"><img src="assets/connectnow-logo.png" alt="CN" /></div>
+    <span class="logo-name">ConnectNow</span>
+    <span class="nav-spacer"></span>
+    <button id="themeBtn" class="btn-ghost icon-btn" title="Toggle theme">🌙</button>
+  </nav>
+
+  <div class="auth-center">
+    <div class="auth-hero">
+      <p class="auth-eyebrow">● WebRTC · Real-time · Open Source</p>
+      <h1 class="auth-headline">Meet without<br><em>friction.</em></h1>
+      <p class="auth-sub">Group video calls, live chat, whiteboard, polls, AI summaries, host controls, and more — all in one minimal space.</p>
+      <div class="auth-pills">
+        <span>🎥 Video Calls</span><span>💬 Live Chat</span><span>🎨 Whiteboard</span>
+        <span>📊 Polls</span><span>🤖 AI Summary</span><span>🔐 Private Rooms</span>
+        <span>📋 Attendance</span><span>✋ Hand Queue</span>
+      </div>
+    </div>
+    <div class="auth-form-wrap">
+      <div class="auth-form">
+        <h2>Get Started</h2>
+        <p class="form-hint">No account needed — just your name.</p>
+        <div class="field-group">
+          <label>Display Name</label>
+          <input id="nameInput" placeholder="Your full name" autocomplete="name" />
+        </div>
+        <div class="field-group">
+          <label>Email</label>
+          <input id="emailInput" placeholder="you@example.com" type="email" autocomplete="email" />
+        </div>
+        <div class="field-group">
+          <label>Avatar Color</label>
+          <div class="avatar-picker" id="avatarPicker">
+            <div class="av-opt active" data-color="#7c6fff" style="background:#7c6fff"></div>
+            <div class="av-opt" data-color="#f472b6" style="background:#f472b6"></div>
+            <div class="av-opt" data-color="#34d399" style="background:#34d399"></div>
+            <div class="av-opt" data-color="#f59e0b" style="background:#f59e0b"></div>
+            <div class="av-opt" data-color="#60a5fa" style="background:#60a5fa"></div>
+            <div class="av-opt" data-color="#fb7185" style="background:#fb7185"></div>
+          </div>
+        </div>
+        <button id="loginBtn" class="btn-primary btn-full">
+          <span>Enter ConnectNow</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER CREDIT -->
+  <footer class="auth-footer">
+    <div class="footer-brand">
+      <p class="footer-title">SAM COLLABS</p>
+      <p class="footer-tagline">YOUR COMPLETE GROWTH PARTNER</p>
+      <p class="footer-credit">Crafted &amp; Developed by <a href="mailto:samarthshinde027@gmail.com" class="footer-author">Samarth Shinde</a></p>
+    </div>
+    <div class="footer-contacts">
+      <a href="tel:+918668529966" class="footer-contact-btn">
+        <span class="fc-icon">📞</span> +91 8668529966
+      </a>
+      <a href="mailto:sam.collab.enquirey@gmail.com" class="footer-contact-btn">
+        <span class="fc-icon">✉️</span> sam.collab.enquirey@gmail.com
+      </a>
+      <a href="mailto:samarthshinde027@gmail.com" class="footer-contact-btn">
+        <span class="fc-icon">📧</span> samarthshinde027@gmail.com
+      </a>
+      <a href="https://instagram.com/sam.collabs" target="_blank" class="footer-contact-btn">
+        <span class="fc-icon">📸</span> @sam.collabs
+      </a>
+    </div>
+    <p class="footer-copy">© 2026 Sam Collabs. All Rights Reserved.</p>
+  </footer>
+</section>
+
+<!-- ══ MAIN APP ══ -->
+<main id="app" class="hidden">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="logo-mark sm"><img src="assets/connectnow-logo.png" alt="CN" /></div>
+      <span class="logo-name">ConnectNow</span>
+      <span class="topbar-badge">Ultimate</span>
+    </div>
+    <div class="topbar-right">
+      <button id="themeBtn2" class="btn-ghost icon-btn" title="Toggle theme">🌙</button>
+      <div class="user-chip">
+        <div class="user-avatar-sm" id="userAvatarTop">GU</div>
+        <span id="userNameTop">Guest</span>
+      </div>
+      <button id="logoutBtn" class="btn-ghost">Sign out</button>
+    </div>
+  </header>
+
+  <!-- DASHBOARD LAYOUT -->
+  <section id="dashboardLayout" class="dashboard-layout">
+    <aside class="sidebar">
+      <p class="sidebar-label">Menu</p>
+      <button class="side-btn active" data-page="dashboardPage">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </button>
+      <button class="side-btn" data-page="schedulePage">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Schedule
+      </button>
+      <button class="side-btn" data-page="messagesPage">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Messages
+      </button>
+      <button class="side-btn" data-page="contactsPage">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Contacts
+      </button>
+      <button class="side-btn" data-page="analyticsPage">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Analytics
+      </button>
+      <button class="side-btn" data-page="settingsPage">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </button>
+      <div class="sidebar-status">
+        <div class="status-dot"></div>
+        <div><p class="status-label">Connection</p><p class="status-val">Excellent</p></div>
+      </div>
+    </aside>
+
+    <section class="main-panel">
+
+      <!-- DASHBOARD PAGE -->
+      <section id="dashboardPage" class="page">
+        <div class="page-header">
+          <div>
+            <h1>Good to see you<span id="greetName"></span> 👋</h1>
+            <p>Start or join a meeting in seconds.</p>
+          </div>
+          <button id="newMeetingFocusBtn" class="btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Meeting
+          </button>
+        </div>
+
+        <div id="nextMeetingBanner" class="next-meeting-banner hidden">
+          <span>⏰ Next meeting: <b id="nextMeetingName">-</b> in <b id="nextMeetingCountdown">-</b></span>
+          <a id="nextMeetingJoin" href="#" class="btn-primary" style="padding:6px 14px;font-size:13px">Join</a>
+        </div>
+
+        <div class="join-card">
+          <div class="join-card-left">
+            <h2>Start or Join</h2>
+            <p>Enter a Room ID to join, or create a new room instantly.</p>
+          </div>
+          <div class="join-card-right">
+            <div class="join-inputs">
+              <input id="roomInput" placeholder="Room ID — e.g. ABC123" />
+              <input id="passwordInput" placeholder="Password (optional)" type="password" />
+            </div>
+            <div class="join-btns">
+              <button id="createRoomBtn" class="btn-primary">Create Room</button>
+              <button id="joinRoomBtn" class="btn-secondary">Join Room</button>
+              <button id="genIcsBtn" class="btn-ghost" title="Download calendar invite">📅 .ics</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="features-grid">
+          <div class="feat-card"><div class="feat-icon">👥</div><h3>Group Calls</h3><p>Multi-participant WebRTC video.</p></div>
+          <div class="feat-card"><div class="feat-icon">🎨</div><h3>Whiteboard</h3><p>Collaborative drawing canvas.</p></div>
+          <div class="feat-card"><div class="feat-icon">📊</div><h3>Polls</h3><p>Live voting inside meetings.</p></div>
+          <div class="feat-card"><div class="feat-icon">🤖</div><h3>AI Summary</h3><p>Auto-generate meeting recap.</p></div>
+          <div class="feat-card"><div class="feat-icon">🔐</div><h3>Waiting Room</h3><p>Host approves who enters.</p></div>
+          <div class="feat-card"><div class="feat-icon">📋</div><h3>Attendance CSV</h3><p>Export participant list.</p></div>
+          <div class="feat-card"><div class="feat-icon">🔇</div><h3>Host Controls</h3><p>Mute, remove, ban, lock.</p></div>
+          <div class="feat-card"><div class="feat-icon">📝</div><h3>Shared Notes</h3><p>Live-synced meeting notes.</p></div>
+          <div class="feat-card"><div class="feat-icon">🎬</div><h3>Layouts</h3><p>Grid, speaker, cinema modes.</p></div>
+        </div>
+      </section>
+
+      <!-- SCHEDULE PAGE -->
+      <section id="schedulePage" class="page hidden">
+        <div class="page-header"><div><h1>Schedule</h1><p>Plan upcoming meetings.</p></div></div>
+        <div class="content-card">
+          <div class="card-form">
+            <div class="field-row">
+              <div class="field-group"><label>Title</label><input id="scheduleTitle" placeholder="Weekly sync…" /></div>
+              <div class="field-group"><label>Date &amp; Time</label><input id="scheduleDate" type="datetime-local" /></div>
+            </div>
+            <div class="field-row">
+              <div class="field-group"><label>Room ID (optional)</label><input id="scheduleRoom" placeholder="AUTO-GENERATED" /></div>
+              <div class="field-group"><label>Timezone</label><input id="scheduleTz" value="Asia/Kolkata" /></div>
+            </div>
+            <div class="btn-row">
+              <button id="saveScheduleBtn" class="btn-primary">Save Meeting</button>
+              <button id="downloadIcsBtn" class="btn-secondary">📅 Download .ics</button>
+              <button id="shareWhatsappBtn" class="btn-secondary">💬 WhatsApp</button>
+            </div>
+          </div>
+          <div id="scheduleList" class="item-list"></div>
+        </div>
+      </section>
+
+      <!-- MESSAGES PAGE -->
+      <section id="messagesPage" class="page hidden">
+        <div class="page-header"><div><h1>Messages</h1><p>Quick notes and saved messages.</p></div></div>
+        <div class="content-card">
+          <div class="card-form">
+            <div class="field-group"><label>Quick Note</label><textarea id="quickMessage" placeholder="Jot something down…"></textarea></div>
+            <button id="saveQuickMessageBtn" class="btn-primary">Save Note</button>
+          </div>
+          <div id="quickMessageList" class="item-list"></div>
+        </div>
+      </section>
+
+      <!-- CONTACTS PAGE -->
+      <section id="contactsPage" class="page hidden">
+        <div class="page-header"><div><h1>Contacts</h1><p>Your meeting contacts.</p></div></div>
+        <div class="content-card">
+          <div class="card-form">
+            <div class="field-row">
+              <div class="field-group"><label>Name</label><input id="contactName" placeholder="Full name" /></div>
+              <div class="field-group"><label>Email</label><input id="contactEmail" placeholder="email@example.com" /></div>
+            </div>
+            <button id="addContactBtn" class="btn-primary">Add Contact</button>
+          </div>
+          <div id="contactList" class="item-list contacts-grid"></div>
+        </div>
+      </section>
+
+      <!-- ANALYTICS PAGE -->
+      <section id="analyticsPage" class="page hidden">
+        <div class="page-header"><div><h1>Analytics</h1><p>Your meeting insights.</p></div></div>
+        <div class="analytics-grid">
+          <div class="stat-card"><div class="stat-num" id="statTotalMeetings">0</div><div class="stat-label">Meetings Joined</div></div>
+          <div class="stat-card"><div class="stat-num" id="statTotalTime">0h</div><div class="stat-label">Total Talk Time</div></div>
+          <div class="stat-card"><div class="stat-num" id="statAvgDur">0m</div><div class="stat-label">Avg Duration</div></div>
+          <div class="stat-card"><div class="stat-num" id="statMsgSent">0</div><div class="stat-label">Messages Sent</div></div>
+        </div>
+        <div class="content-card" style="margin-top:16px">
+          <h3 style="margin-bottom:16px">Meeting History</h3>
+          <div id="meetingHistory" class="item-list"></div>
+        </div>
+      </section>
+
+      <!-- SETTINGS PAGE -->
+      <section id="settingsPage" class="page hidden">
+        <div class="page-header"><div><h1>Settings</h1><p>Manage your profile &amp; preferences.</p></div></div>
+        <div class="content-card">
+          <h3 class="settings-section-title">Profile</h3>
+          <div class="card-form">
+            <div class="field-row">
+              <div class="field-group"><label>Display Name</label><input id="profileName" /></div>
+              <div class="field-group"><label>Email</label><input id="profileEmail" /></div>
+            </div>
+            <div class="field-group"><label>Avatar Color</label>
+              <div class="avatar-picker" id="avatarPickerSettings">
+                <div class="av-opt active" data-color="#7c6fff" style="background:#7c6fff"></div>
+                <div class="av-opt" data-color="#f472b6" style="background:#f472b6"></div>
+                <div class="av-opt" data-color="#34d399" style="background:#34d399"></div>
+                <div class="av-opt" data-color="#f59e0b" style="background:#f59e0b"></div>
+                <div class="av-opt" data-color="#60a5fa" style="background:#60a5fa"></div>
+                <div class="av-opt" data-color="#fb7185" style="background:#fb7185"></div>
+              </div>
+            </div>
+          </div>
+          <h3 class="settings-section-title">Preferences</h3>
+          <div class="settings-toggles">
+            <label class="toggle-row"><span>Sound notifications (join/leave)</span><input type="checkbox" id="prefSounds" checked /></label>
+            <label class="toggle-row"><span>Show captions</span><input type="checkbox" id="prefCaptions" /></label>
+            <label class="toggle-row"><span>Mirror my video</span><input type="checkbox" id="prefMirror" /></label>
+            <label class="toggle-row"><span>Low bandwidth mode</span><input type="checkbox" id="prefLowBW" /></label>
+            <label class="toggle-row"><span>Show keyboard shortcuts</span><input type="checkbox" id="prefShortcuts" checked /></label>
+          </div>
+          <div class="btn-row" style="margin-top:20px">
+            <button id="saveProfileBtn" class="btn-primary">Save Profile</button>
+            <button id="clearDataBtn" class="btn-danger">Clear All Data</button>
+          </div>
+        </div>
+        <!-- ABOUT / CREDIT -->
+        <div class="content-card about-card" style="margin-top:16px">
+          <div class="about-header">
+            <div>
+              <h3>SAM COLLABS</h3>
+              <p class="about-tagline">YOUR COMPLETE GROWTH PARTNER</p>
+              <p>Crafted &amp; Developed by <strong style="color:var(--accent-2)">Samarth Shinde</strong></p>
+            </div>
+          </div>
+          <div class="about-contacts">
+            <a href="tel:+918668529966" class="footer-contact-btn">📞 +91 8668529966</a>
+            <a href="mailto:sam.collab.enquirey@gmail.com" class="footer-contact-btn">✉️ sam.collab.enquirey@gmail.com</a>
+            <a href="mailto:samarthshinde027@gmail.com" class="footer-contact-btn">📧 samarthshinde027@gmail.com</a>
+            <a href="https://instagram.com/sam.collabs" target="_blank" class="footer-contact-btn">📸 @sam.collabs</a>
+          </div>
+          <p style="font-size:12px;color:var(--text-3);margin-top:12px">© 2026 Sam Collabs. All Rights Reserved.</p>
+        </div>
+      </section>
+    </section>
+  </section>
+
+  <!-- ══ MEETING SCREEN ══ -->
+  <section id="meetingScreen" class="meeting-screen hidden">
+
+    <!-- LEFT PANEL -->
+    <aside id="leftPanel" class="meet-left">
+      <div class="meet-brand">
+        <div class="logo-mark sm"><img src="assets/connectnow-logo.png" alt="CN" /></div>
+        <div><span class="logo-name">ConnectNow</span><span class="live-badge">● LIVE</span></div>
+      </div>
+
+      <div class="room-info-card">
+        <p class="room-info-label">Room</p>
+        <h2 id="roomText" class="room-id-text">ROOM</h2>
+        <div class="timer-row">⏱ <b id="timerText">00:00</b>
+          <span id="roomLockedBadge" class="lock-badge hidden">🔒 Locked</span>
+        </div>
+        <div class="room-actions">
+          <button id="copyLinkBtn" class="btn-room">🔗 Copy Invite</button>
+          <button id="showQrBtn" class="btn-room">📷 QR Code</button>
+          <button id="attendanceBtn" class="btn-room">📋 Export CSV</button>
+          <button id="shareWhatsappMeetBtn" class="btn-room">💬 WhatsApp</button>
+          <button id="lockRoomBtn" class="btn-room" data-locked="false">🔒 Lock Room</button>
+        </div>
+      </div>
+
+      <!-- HAND QUEUE -->
+      <div id="handQueueSection" class="hand-queue hidden">
+        <p class="sidebar-label">✋ Hand Queue</p>
+        <div id="handQueueList"></div>
+      </div>
+
+      <div class="participants-header">
+        <span>Participants</span>
+        <span id="participantCount" class="count-badge">1</span>
+      </div>
+      <div id="participantsList" class="participants-list"></div>
+    </aside>
+
+    <!-- CENTER STAGE -->
+    <section class="meet-stage">
+      <div class="stage-top">
+        <div class="stage-info">
+          <h2 id="meetingTitle">Meeting</h2>
+          <span class="connected-dot">● Connected</span>
+        </div>
+        <div class="stage-top-actions">
+          <div class="layout-btns">
+            <button class="layout-btn active" data-layout="grid" title="Grid">⊞</button>
+            <button class="layout-btn" data-layout="speaker" title="Speaker">▣</button>
+            <button class="layout-btn" data-layout="cinema" title="Cinema">▬</button>
+          </div>
+          <button id="captionsToggleBtn" class="btn-ghost icon-btn" title="Captions">CC</button>
+          <button id="mobileParticipantsBtn" class="btn-ghost icon-btn">👥</button>
+        </div>
+      </div>
+
+      <!-- CAPTIONS BAR -->
+      <div id="captionsBar" class="captions-bar hidden">
+        <span id="captionsText">Captions will appear here…</span>
+      </div>
+
+      <div id="videoGrid" class="video-grid layout-grid"></div>
+      <div id="reactionBubble" class="reaction-bubble"></div>
+
+      <!-- CONTROLS BAR -->
+      <div class="controls-bar">
+        <div class="controls-group">
+          <button id="muteBtn" class="ctrl-btn" title="Mute [M]"><span class="ctrl-icon">🎙️</span><span class="ctrl-label">Mute</span></button>
+          <button id="cameraBtn" class="ctrl-btn" title="Camera [V]"><span class="ctrl-icon">📹</span><span class="ctrl-label">Video</span></button>
+          <button id="screenBtn" class="ctrl-btn" title="Share Screen [S]"><span class="ctrl-icon">🖥️</span><span class="ctrl-label">Share</span></button>
+          <button id="blurBtn" class="ctrl-btn" title="Background Blur"><span class="ctrl-icon">🌫️</span><span class="ctrl-label">Blur</span></button>
+          <button id="filterBtn" class="ctrl-btn" title="Video Filter"><span class="ctrl-icon">🎨</span><span class="ctrl-label">Filter</span></button>
+        </div>
+        <div class="controls-divider"></div>
+        <div class="controls-group">
+          <button id="handBtn" class="ctrl-btn" title="Raise Hand [H]"><span class="ctrl-icon">✋</span><span class="ctrl-label">Hand</span></button>
+          <button id="reactionBtn" class="ctrl-btn" title="React [R]"><span class="ctrl-icon">❤️</span><span class="ctrl-label">React</span></button>
+          <button id="chatOpenBtn" class="ctrl-btn" title="Chat [C]"><span class="ctrl-icon">💬</span><span class="ctrl-label">Chat<span id="unreadBadge" class="unread-badge hidden">0</span></span></button>
+          <button id="notesOpenBtn" class="ctrl-btn" title="Notes [N]"><span class="ctrl-icon">📝</span><span class="ctrl-label">Notes</span></button>
+          <button id="whiteboardBtn" class="ctrl-btn" title="Whiteboard [W]"><span class="ctrl-icon">🎨</span><span class="ctrl-label">Board</span></button>
+          <button id="pollBtn" class="ctrl-btn" title="Polls"><span class="ctrl-icon">📊</span><span class="ctrl-label">Polls</span></button>
+          <button id="agendaBtn" class="ctrl-btn" title="Agenda"><span class="ctrl-icon">📋</span><span class="ctrl-label">Agenda</span></button>
+          <button id="aiSummaryBtn" class="ctrl-btn" title="AI Summary"><span class="ctrl-icon">🤖</span><span class="ctrl-label">Summary</span></button>
+          <button id="soundboardBtn" class="ctrl-btn" title="Soundboard"><span class="ctrl-icon">🎵</span><span class="ctrl-label">Sounds</span></button>
+        </div>
+        <div class="controls-divider"></div>
+        <button id="leaveBtn" class="ctrl-btn danger-ctrl" title="Leave [Q]"><span class="ctrl-icon">📞</span><span class="ctrl-label">Leave</span></button>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL -->
+    <aside id="rightPanel" class="meet-right">
+      <div class="panel-header">
+        <div class="panel-tabs">
+          <button id="chatTabBtn" class="tab-btn active">Chat</button>
+          <button id="notesTabBtn" class="tab-btn">Notes</button>
+          <button id="whiteboardTabBtn" class="tab-btn">Board</button>
+          <button id="pollTabBtn" class="tab-btn">Polls</button>
+          <button id="agendaTabBtn" class="tab-btn">Agenda</button>
+        </div>
+        <button id="closePanelBtn" class="btn-ghost icon-btn">✕</button>
+      </div>
+
+      <!-- CHAT PANEL -->
+      <section id="chatPanel" class="panel-body">
+        <div id="dmBanner" class="dm-banner hidden">
+          <span>Private chat with: <b id="dmTargetName"></b></span>
+          <button id="clearDmBtn" class="btn-ghost" style="font-size:12px;padding:4px 8px">× Clear DM</button>
+        </div>
+        <div id="messages" class="messages-list"></div>
+        <div class="chat-compose">
+          <label class="file-attach" title="Attach file"><input id="fileInput" type="file" />📎</label>
+          <input id="messageInput" placeholder="Send a message… (Enter to send)" />
+          <button id="sendMessageBtn" class="send-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- NOTES PANEL -->
+      <section id="notesPanel" class="panel-body hidden">
+        <div class="notes-toolbar">
+          <button id="exportNotesBtn" class="btn-ghost" style="font-size:12px">📥 Export</button>
+          <button id="clearNotesBtn" class="btn-ghost" style="font-size:12px">🗑 Clear</button>
+        </div>
+        <textarea id="notesArea" placeholder="Write shared meeting notes… Changes sync to all participants instantly."></textarea>
+      </section>
+
+      <!-- WHITEBOARD PANEL -->
+      <section id="whiteboardPanel" class="panel-body hidden">
+        <div class="whiteboard-toolbar">
+          <button class="wb-tool active" data-tool="pen">✏️</button>
+          <button class="wb-tool" data-tool="eraser">⬜</button>
+          <input type="color" id="wbColor" value="#7c6fff" title="Color" style="width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;background:none;padding:0;" />
+          <input type="range" id="wbSize" min="2" max="20" value="4" style="width:70px" />
+          <button id="wbClearBtn" class="btn-ghost" style="font-size:12px;margin-left:auto">Clear</button>
+        </div>
+        <canvas id="whiteboardCanvas" class="whiteboard-canvas"></canvas>
+      </section>
+
+      <!-- POLLS PANEL -->
+      <section id="pollsPanel" class="panel-body hidden">
+        <div id="createPollForm" class="poll-create-form hidden">
+          <div class="field-group"><label>Question</label><input id="pollQuestion" placeholder="Your question…" /></div>
+          <div id="pollOptions">
+            <input class="poll-opt" placeholder="Option 1" style="margin-bottom:6px" />
+            <input class="poll-opt" placeholder="Option 2" style="margin-bottom:6px" />
+          </div>
+          <div class="btn-row">
+            <button id="addPollOptionBtn" class="btn-ghost" style="font-size:12px">+ Add Option</button>
+            <button id="launchPollBtn" class="btn-primary" style="font-size:12px">Launch Poll</button>
+            <button id="cancelPollBtn" class="btn-ghost" style="font-size:12px">Cancel</button>
+          </div>
+        </div>
+        <div class="btn-row" style="margin-bottom:12px">
+          <button id="newPollBtn" class="btn-primary" style="font-size:12px">+ New Poll</button>
+        </div>
+        <div id="pollsList" class="polls-list"></div>
+      </section>
+
+      <!-- AGENDA PANEL -->
+      <section id="agendaPanel" class="panel-body hidden">
+        <div class="card-form" style="margin-bottom:12px">
+          <div class="field-group"><label>Agenda Item</label><input id="agendaItemInput" placeholder="e.g. Project update (10 min)" /></div>
+          <button id="addAgendaBtn" class="btn-primary" style="font-size:12px">Add Item</button>
+        </div>
+        <div id="agendaList" class="agenda-list"></div>
+      </section>
+    </aside>
+  </section>
+</main>
+
+<!-- REACTION PICKER -->
+<div id="reactionPicker" class="reaction-picker hidden">
+  <button class="react-opt" data-r="👍">👍</button>
+  <button class="react-opt" data-r="❤️">❤️</button>
+  <button class="react-opt" data-r="😂">😂</button>
+  <button class="react-opt" data-r="👏">👏</button>
+  <button class="react-opt" data-r="🎉">🎉</button>
+  <button class="react-opt" data-r="🔥">🔥</button>
+  <button class="react-opt" data-r="😮">😮</button>
+  <button class="react-opt" data-r="💯">💯</button>
+</div>
+
+<!-- FILTER PICKER -->
+<div id="filterPicker" class="filter-picker hidden">
+  <button class="filter-opt active" data-filter="none">Normal</button>
+  <button class="filter-opt" data-filter="grayscale(1)">B&W</button>
+  <button class="filter-opt" data-filter="sepia(0.8)">Sepia</button>
+  <button class="filter-opt" data-filter="hue-rotate(90deg)">Hue</button>
+  <button class="filter-opt" data-filter="contrast(1.5)">Vivid</button>
+  <button class="filter-opt" data-filter="brightness(1.3)">Bright</button>
+</div>
+
+<!-- SOUNDBOARD -->
+<div id="soundboard" class="soundboard hidden">
+  <p class="soundboard-title">Soundboard</p>
+  <div class="soundboard-btns">
+    <button class="sound-btn" data-sound="applause">👏 Applause</button>
+    <button class="sound-btn" data-sound="drum">🥁 Drum Roll</button>
+    <button class="sound-btn" data-sound="laugh">😂 Laugh</button>
+    <button class="sound-btn" data-sound="tada">🎉 Ta-da!</button>
+    <button class="sound-btn" data-sound="bell">🔔 Bell</button>
+    <button class="sound-btn" data-sound="boo">😡 Boo</button>
+  </div>
+</div>
+
+<!-- AI SUMMARY MODAL -->
+<div id="aiModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>🤖 AI Meeting Summary</h3>
+      <button id="closeAiModal" class="btn-ghost icon-btn">✕</button>
+    </div>
+    <div id="aiSummaryContent" class="ai-summary-content">
+      <div class="ai-loading" id="aiLoading">
+        <div class="ai-spinner"></div>
+        <p>Generating summary…</p>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:12px">
+      <button id="copyAiSummaryBtn" class="btn-primary" style="font-size:13px">📋 Copy Summary</button>
+      <button id="exportAiSummaryBtn" class="btn-secondary" style="font-size:13px">📥 Export .txt</button>
+    </div>
+  </div>
+</div>
+
+<!-- QR MODAL -->
+<div id="qrModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>📷 Invite to Meeting</h3>
+      <button id="closeQrBtn" class="btn-ghost icon-btn">✕</button>
+    </div>
+    <p class="modal-sub">Scan the QR code or share the link.</p>
+    <div class="qr-wrap"><img id="qrImage" alt="QR Code" /></div>
+    <div class="qr-link-row">
+      <input id="qrLinkInput" readonly />
+      <button id="copyQrLinkBtn" class="btn-primary">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- MOOD METER MODAL (end of meeting) -->
+<div id="moodModal" class="modal-overlay hidden">
+  <div class="modal-box" style="text-align:center">
+    <h3 style="margin-bottom:8px">How was the meeting?</h3>
+    <p style="color:var(--text-2);font-size:14px;margin-bottom:20px">Rate your experience</p>
+    <div class="mood-btns">
+      <button class="mood-btn" data-mood="amazing">🤩 Amazing</button>
+      <button class="mood-btn" data-mood="good">😊 Good</button>
+      <button class="mood-btn" data-mood="okay">😐 Okay</button>
+      <button class="mood-btn" data-mood="bad">😞 Not great</button>
+    </div>
+    <button id="skipMoodBtn" class="btn-ghost" style="margin-top:12px;font-size:13px">Skip</button>
+  </div>
+</div>
+
+<!-- KEYBOARD SHORTCUTS MODAL -->
+<div id="shortcutsModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-header"><h3>⌨️ Keyboard Shortcuts</h3><button id="closeShortcutsModal" class="btn-ghost icon-btn">✕</button></div>
+    <div class="shortcuts-grid">
+      <div class="shortcut-item"><kbd>M</kbd><span>Mute/Unmute</span></div>
+      <div class="shortcut-item"><kbd>V</kbd><span>Camera on/off</span></div>
+      <div class="shortcut-item"><kbd>S</kbd><span>Share Screen</span></div>
+      <div class="shortcut-item"><kbd>H</kbd><span>Raise/Lower Hand</span></div>
+      <div class="shortcut-item"><kbd>C</kbd><span>Open Chat</span></div>
+      <div class="shortcut-item"><kbd>N</kbd><span>Open Notes</span></div>
+      <div class="shortcut-item"><kbd>W</kbd><span>Whiteboard</span></div>
+      <div class="shortcut-item"><kbd>R</kbd><span>Reactions</span></div>
+      <div class="shortcut-item"><kbd>Q</kbd><span>Leave Meeting</span></div>
+      <div class="shortcut-item"><kbd>?</kbd><span>Show Shortcuts</span></div>
+    </div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
